@@ -1,7 +1,9 @@
-"use client";
+'use client';
+
+import Link from 'next/link';
 
 import { AuroraBackground } from '@/components/ui/aurora-background';
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion';
 
 export default function HomePage() {
   return (
@@ -22,9 +24,13 @@ export default function HomePage() {
         <div className="font-extralight text-base md:text-4xl dark:text-neutral-200 py-4">
           Kütüphanenizi daha verimli yönetin.
         </div>
-        <button className="bg-black dark:bg-white rounded-full w-fit text-white dark:text-black px-4 py-2">
+        <Link
+          href={'/login'}
+          className="bg-black dark:bg-white rounded-full w-fit text-white dark:text-black px-4 py-2"
+          role="button"
+        >
           Giriş Yap
-        </button>
+        </Link>
       </motion.div>
     </AuroraBackground>
   );
