@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model books {
+  id           Int      @id @default(autoincrement())
+  book_name    String?  @db.VarChar(100)
+  author_name  String?  @db.VarChar(50)
+  publisher    String?  @db.VarChar(100)
+  publish_year Int?
+  page_count   Int?
+  book_type    String?  @db.VarChar(100)
+  book_case    String?  @db.VarChar(50)
+  shelf        Int?
+  row          Int?
+  entrusted    Boolean? @default(false)
+  loans        loans[]
+}
+
+model loans {
+  id          Int      @id @default(autoincrement())
+  book_id     Int
+  reader_id   Int
+  loan_date   DateTime @default(dbgenerated("CURRENT_DATE")) @db.Date
+  return_date DateTime @db.Date
+  books       books    @relation(fields: [book_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_loans_books_id")
+  users       users    @relation(fields: [reader_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_loans_users_id")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model readers {
+  id        Int     @id @default(autoincrement())
+  name      String? @db.VarChar(50)
+  surname   String? @db.VarChar(50)
+  gender    String? @db.Char
+  school_no Int?
+  phone     String? @db.VarChar(20)
+  adress    String?
+}
+
+model sessions {
+  id           Int    @id @default(autoincrement())
+  sessionToken String @unique(map: "unique_sessionToken")
+  userId       Int
+  users        users  @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_sessions_users_id")
+}
+
+model users {
+  id       Int        @id @default(autoincrement())
+  name     String?    @db.VarChar(50)
+  surname  String?    @db.VarChar(50)
+  email    String     @unique(map: "unique_email") @db.VarChar(255)
+  password String     @db.VarChar(255)
+  image    String?
+  loans    loans[]
+  sessions sessions[]
+}
