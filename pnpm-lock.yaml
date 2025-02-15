@@ -12,8 +12,13 @@ importers:
         specifier: ^4.0.1
         version: 4.0.1(@prisma/client@6.3.1(prisma@6.3.1(typescript@5.7.3))(typescript@5.7.3))(lucia@3.2.2)
       '@prisma/client':
+<<<<<<< HEAD
         specifier: ^6.3.1
         version: 6.3.1(prisma@6.3.1(typescript@5.7.3))(typescript@5.7.3)
+=======
+        specifier: ^5.22.0
+        version: 5.22.0(prisma@6.3.1(typescript@5.7.3))
+>>>>>>> 866a64c6bc4b60a9d0e1d6f0cb9a74f498bbea66
       '@radix-ui/react-checkbox':
         specifier: ^1.1.4
         version: 1.1.4(@types/react-dom@19.0.3(@types/react@19.0.8))(@types/react@19.0.8)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
