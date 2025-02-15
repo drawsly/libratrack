@@ -1,7 +1,9 @@
 'use client';
+import { registerUser } from '@/actions/auth';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useActionState, useState } from 'react';
+
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -13,8 +15,17 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { LoaderCircle } from 'lucide-react';
+
+type RegisterState = {
+  error: string;
+};
 
 export default function RegisterPage() {
+  const [state, formAction, isPending] = useActionState(registerUser, {
+    error: '',
+  }) as [RegisterState, (payload: FormData) => void, boolean];
+
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
   const [email, setEmail] = useState('');
@@ -30,7 +41,7 @@ export default function RegisterPage() {
             Hoşgeldiniz! Başlamak için kayıt olun.
           </CardDescription>
         </CardHeader>
-        <form action={(formData) => console.log(formData)}>
+        <form action={formAction}>
           <CardContent className="grid gap-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -38,20 +49,26 @@ export default function RegisterPage() {
                 <Input
                   type="text"
                   name="name"
-                  required
+                  
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
+                {state?.error?.includes('İsim') && (
+                  <span className="text-red-500 text-sm">{state.error}</span>
+                )}
               </div>
               <div className="space-y-2">
                 <Label>Soyisim</Label>
                 <Input
                   type="text"
                   name="surname"
-                  required
+                  
                   value={surname}
                   onChange={(e) => setSurname(e.target.value)}
                 />
+                {state?.error?.includes('Soyisim') && (
+                  <span className="text-red-500 text-sm">{state.error}</span>
+                )}
               </div>
             </div>
             <div className="space-y-2">
@@ -59,20 +76,26 @@ export default function RegisterPage() {
               <Input
                 type="email"
                 name="email"
-                required
+                
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
+              {state?.error?.includes('email') && (
+                <span className="text-red-500 text-sm">{state.error}</span>
+              )}
             </div>
             <div className="space-y-2">
               <Label>Şifre</Label>
               <Input
                 type="password"
                 name="password"
-                required
+                
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              {state?.error?.includes('Şifre') && (
+                <span className="text-red-500 text-sm">{state.error}</span>
+              )}
             </div>
             <div className="space-y-2">
               <Label>Şifreni doğrula</Label>
@@ -83,11 +106,25 @@ export default function RegisterPage() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
+              {state?.error?.includes('Şifreler') && (
+                <span className="text-red-500 text-sm">{state.error}</span>
+              )}
             </div>
           </CardContent>
           <CardFooter>
             <div className="grid w-full gap-y-4">
-              <Button>Kayıt ol</Button>
+              <Button disabled={isPending}>
+                {isPending ? (
+                  <LoaderCircle
+                    className="-ms-1 me-2 animate-spin"
+                    size={20}
+                    strokeWidth={2}
+                    aria-hidden="true"
+                  />
+                ) : (
+                  'Kayıt ol'
+                )}
+              </Button>
               <Button variant="link" size="sm" asChild>
                 <Link href="/login">Zaten bir hesabın var mı? Giriş yap</Link>
               </Button>
