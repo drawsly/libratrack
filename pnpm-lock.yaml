@@ -12,7 +12,7 @@ importers:
         specifier: ^4.0.1
         version: 4.0.1(@prisma/client@5.22.0(prisma@6.3.1(typescript@5.7.3)))(lucia@3.2.2)
       '@prisma/client':
-        specifier: ^5.0.0
+        specifier: ^5.22.0
         version: 5.22.0(prisma@6.3.1(typescript@5.7.3))
       '@radix-ui/react-checkbox':
         specifier: ^1.1.4
