@@ -17,9 +17,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { LoaderCircle } from 'lucide-react';
 
-type RegisterState = {
-  error: string;
-};
+import { RegisterState } from '@/types/auth';
 
 export default function RegisterPage() {
   const [state, formAction, isPending] = useActionState(registerUser, {
@@ -49,7 +47,6 @@ export default function RegisterPage() {
                 <Input
                   type="text"
                   name="name"
-                  
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
@@ -62,7 +59,6 @@ export default function RegisterPage() {
                 <Input
                   type="text"
                   name="surname"
-                  
                   value={surname}
                   onChange={(e) => setSurname(e.target.value)}
                 />
@@ -76,7 +72,6 @@ export default function RegisterPage() {
               <Input
                 type="email"
                 name="email"
-                
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -89,7 +84,6 @@ export default function RegisterPage() {
               <Input
                 type="password"
                 name="password"
-                
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />

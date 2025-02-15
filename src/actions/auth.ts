@@ -1,5 +1,6 @@
 'use server'
 
+import { RegisterState } from "@/types/auth";
 import { z } from "zod";
 
 const registerSchema = z.object({
@@ -13,7 +14,7 @@ const registerSchema = z.object({
     path: ["confirmPassword"]
 });
 
-export async function registerUser(prevState: any, formData: FormData) {
+export async function registerUser(prevState: RegisterState | undefined, formData: FormData) {
     await new Promise((resolve) => setTimeout(resolve, 2000));
     const data = Object.fromEntries(formData);
 
