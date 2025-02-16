@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "books" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "book_name" VARCHAR(100),
     "author_name" VARCHAR(50),
     "publisher" VARCHAR(100),
@@ -17,9 +17,9 @@ CREATE TABLE "books" (
 
 -- CreateTable
 CREATE TABLE "loans" (
-    "id" SERIAL NOT NULL,
-    "book_id" INTEGER NOT NULL,
-    "reader_id" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "book_id" TEXT NOT NULL,
+    "reader_id" TEXT NOT NULL,
     "loan_date" DATE NOT NULL DEFAULT CURRENT_DATE,
     "return_date" DATE NOT NULL,
 
@@ -28,7 +28,7 @@ CREATE TABLE "loans" (
 
 -- CreateTable
 CREATE TABLE "readers" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "name" VARCHAR(50),
     "surname" VARCHAR(50),
     "gender" CHAR,
@@ -41,16 +41,16 @@ CREATE TABLE "readers" (
 
 -- CreateTable
 CREATE TABLE "sessions" (
-    "id" SERIAL NOT NULL,
-    "sessionToken" TEXT NOT NULL,
-    "userId" INTEGER NOT NULL,
+    "id" TEXT NOT NULL,
+    "expires_at" TIMESTAMP(6) NOT NULL,
+    "user_id" TEXT NOT NULL,
 
     CONSTRAINT "sessions_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "users" (
-    "id" SERIAL NOT NULL,
+    "id" TEXT NOT NULL,
     "name" VARCHAR(50),
     "surname" VARCHAR(50),
     "email" VARCHAR(255) NOT NULL,
@@ -61,7 +61,7 @@ CREATE TABLE "users" (
 );
 
 -- CreateIndex
-CREATE UNIQUE INDEX "unique_sessionToken" ON "sessions"("sessionToken");
+CREATE INDEX "sessions_user_id_idx" ON "sessions"("user_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "unique_email" ON "users"("email");
@@ -73,4 +73,4 @@ ALTER TABLE "loans" ADD CONSTRAINT "fk_loans_books_id" FOREIGN KEY ("book_id") R
 ALTER TABLE "loans" ADD CONSTRAINT "fk_loans_users_id" FOREIGN KEY ("reader_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE "sessions" ADD CONSTRAINT "fk_sessions_users_id" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE NO ACTION;
+ALTER TABLE "sessions" ADD CONSTRAINT "sessions_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;

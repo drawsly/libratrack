@@ -8,7 +8,7 @@ datasource db {
 }
 
 model books {
-  id           Int      @id @default(autoincrement())
+  id           String   @id @default(cuid()) // Int -> String
   book_name    String?  @db.VarChar(100)
   author_name  String?  @db.VarChar(50)
   publisher    String?  @db.VarChar(100)
@@ -23,18 +23,17 @@ model books {
 }
 
 model loans {
-  id          Int      @id @default(autoincrement())
-  book_id     Int
-  reader_id   Int
+  id          String   @id @default(cuid()) // Int -> String
+  book_id     String // Int -> String
+  reader_id   String // Int -> String
   loan_date   DateTime @default(dbgenerated("CURRENT_DATE")) @db.Date
   return_date DateTime @db.Date
   books       books    @relation(fields: [book_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_loans_books_id")
   users       users    @relation(fields: [reader_id], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_loans_users_id")
 }
 
-/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model readers {
-  id        Int     @id @default(autoincrement())
+  id        String  @id @default(cuid()) // Int -> String
   name      String? @db.VarChar(50)
   surname   String? @db.VarChar(50)
   gender    String? @db.Char
@@ -45,14 +44,16 @@ model readers {
 
 model sessions {
   id        String   @id
-  userId    Int
-  expiresAt DateTime
+  expiresAt DateTime @map("expires_at") @db.Timestamp(6)
+  userId    String   @map("user_id")
+  user      users    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  user users @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId])
+  @@map("sessions")
 }
 
 model users {
-  id       Int        @id @default(autoincrement())
+  id       String     @id @default(cuid())
   name     String?    @db.VarChar(50)
   surname  String?    @db.VarChar(50)
   email    String     @unique(map: "unique_email") @db.VarChar(255)
