@@ -13,4 +13,5 @@ export type RegisterState = {
 
 export type LoginState = {
     error?: string;
+    success?: boolean;
 };

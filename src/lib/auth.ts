@@ -3,6 +3,8 @@ import 'server-only'
 import { Lucia } from "lucia";
 import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
 import { Prisma, PrismaClient } from "@prisma/client";
+import * as bcrypt from 'bcryptjs';
+import { cookies } from 'next/headers';
 
 const prisma = new PrismaClient();
 
@@ -11,10 +13,10 @@ const adapter = new PrismaAdapter(prisma.sessions, prisma.users);
 export const lucia = new Lucia(adapter, {
     sessionCookie: {
         attributes: {
-            // set to `true` when using HTTPS
-            secure: process.env.NODE_ENV === "production"
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
         }
-    }
+    },
 });
 
 // IMPORTANT!
@@ -40,16 +42,22 @@ export async function createUser(name: string, surname: string, email: string, p
             });
         }
 
+        const hashedPassword = await bcrypt.hash(password, 10);
+
         const user = await prisma.users.create({
             data: {
                 name,
                 surname,
                 email,
-                password, // TODO: şifre argon ile hashlenecek
+                password: hashedPassword,
             },
         });
         return user;
     } catch (error) {
         throw error;
     }
+}
+
+export async function verifyPassword(password: string, hashedPassword: string) {
+    return await bcrypt.compare(password, hashedPassword);
 }
