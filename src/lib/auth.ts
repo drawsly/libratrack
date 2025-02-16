@@ -1,10 +1,12 @@
+import 'server-only'
+
 import { Lucia } from "lucia";
 import { PrismaAdapter } from "@lucia-auth/adapter-prisma";
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
-const client = new PrismaClient();
+const prisma = new PrismaClient();
 
-const adapter = new PrismaAdapter(client.sessions, client.users);
+const adapter = new PrismaAdapter(prisma.sessions, prisma.users);
 
 export const lucia = new Lucia(adapter, {
     sessionCookie: {
@@ -19,5 +21,35 @@ export const lucia = new Lucia(adapter, {
 declare module "lucia" {
     interface Register {
         Lucia: typeof lucia;
+    }
+}
+
+export async function createUser(name: string, surname: string, email: string, password: string) {
+    try {
+        const existingUser = await prisma.users.findUnique({
+            where: {
+                email: email
+            }
+        });
+
+        if (existingUser) {
+            throw new Prisma.PrismaClientKnownRequestError('', {
+                code: 'P2002',
+                clientVersion: '',
+                meta: { target: ['email'] }
+            });
+        }
+
+        const user = await prisma.users.create({
+            data: {
+                name,
+                surname,
+                email,
+                password, // TODO: şifre argon ile hashlenecek
+            },
+        });
+        return user;
+    } catch (error) {
+        throw error;
     }
 }
