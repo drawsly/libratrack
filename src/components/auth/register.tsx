@@ -1,9 +1,8 @@
 'use client';
-import { registerUser } from '@/actions/auth';
 
+import { registerUser } from '@/actions/auth';
 import Link from 'next/link';
 import { useActionState, useState } from 'react';
-
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -16,13 +15,37 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { LoaderCircle } from 'lucide-react';
-
 import { RegisterState } from '@/types/auth';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 export default function RegisterPage() {
-  const [state, formAction, isPending] = useActionState(registerUser, {
-    error: '',
-  }) as [RegisterState, (payload: FormData) => void, boolean];
+  const router = useRouter();
+
+  const [state, formAction, isPending] = useActionState(
+    async (prevState: any, formData: FormData) => {
+      const result = await registerUser(prevState, formData);
+
+      if (result.error) {
+        toast.error('Hata!', {
+          description: result.error,
+        });
+      } else {
+        toast.success('Başarılı!', {
+          description:
+            'Hesabınız başarıyla oluşturuldu. Yönlendiriliyorsunuz...',
+        });
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 2000);
+      }
+
+      return result;
+    },
+    {
+      error: '',
+    }
+  ) as [RegisterState, (payload: FormData) => void, boolean];
 
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
@@ -50,7 +73,7 @@ export default function RegisterPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
-                {state?.error?.includes('İsim') && (
+                {state?.error && state.error.includes('İsim') && (
                   <span className="text-red-500 text-sm">{state.error}</span>
                 )}
               </div>
@@ -62,7 +85,7 @@ export default function RegisterPage() {
                   value={surname}
                   onChange={(e) => setSurname(e.target.value)}
                 />
-                {state?.error?.includes('Soyisim') && (
+                {state?.error && state.error.includes('Soyisim') && (
                   <span className="text-red-500 text-sm">{state.error}</span>
                 )}
               </div>
@@ -75,7 +98,7 @@ export default function RegisterPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-              {state?.error?.includes('email') && (
+              {state?.error && state.error.includes('email') && (
                 <span className="text-red-500 text-sm">{state.error}</span>
               )}
             </div>
@@ -87,7 +110,7 @@ export default function RegisterPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              {state?.error?.includes('Şifre') && (
+              {state?.error && state.error.includes('Şifre') && (
                 <span className="text-red-500 text-sm">{state.error}</span>
               )}
             </div>
@@ -100,7 +123,7 @@ export default function RegisterPage() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
-              {state?.error?.includes('Şifreler') && (
+              {state?.error && state.error.includes('Şifreler') && (
                 <span className="text-red-500 text-sm">{state.error}</span>
               )}
             </div>
