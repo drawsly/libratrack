@@ -61,3 +61,15 @@ export async function createUser(name: string, surname: string, email: string, p
 export async function verifyPassword(password: string, hashedPassword: string) {
     return await bcrypt.compare(password, hashedPassword);
 }
+
+export async function createAuthSession(userId: string) {
+    const session = await lucia.createSession(userId, {});
+
+    const sessionCookie = lucia.createSessionCookie(session.id);
+
+    (await cookies()).set(
+        sessionCookie.name,
+        sessionCookie.value,
+        sessionCookie.attributes
+    );
+}

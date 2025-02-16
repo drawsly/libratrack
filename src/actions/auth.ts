@@ -1,10 +1,9 @@
 'use server'
 
 import { z } from "zod";
-import { cookies } from "next/headers";
-import { lucia } from "@/lib/auth";
 import { RegisterState } from "@/types/auth";
 import { PrismaClient } from "@prisma/client";
+import { createAuthSession } from "@/lib/auth";
 import * as bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -53,6 +52,9 @@ export async function registerUser(prevState: RegisterState | undefined, formDat
             },
         });
 
+        await createAuthSession(user.id);
+
+
         return { success: true };
     } catch (error) {
         console.error("Register error:", error);
@@ -86,15 +88,7 @@ export async function loginUser(prevState: any, formData: FormData) {
             return { error: "Email veya şifre hatalı" };
         }
 
-        const session = await lucia.createSession(user.id, {});
-  
-        const sessionCookie = lucia.createSessionCookie(session.id);
-      
-        (await cookies()).set(
-            sessionCookie.name,
-            sessionCookie.value,
-            sessionCookie.attributes
-        );
+        await createAuthSession(user.id);
 
         return { success: true };
 
