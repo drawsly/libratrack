@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { siteMetadata } from '@/lib/metadata';
 import { ThemeProvider } from '@/components/providers';
+import { Toaster } from '@/components/ui/sonner';
 
 import '../styles/globals.css';
 
@@ -24,6 +25,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
