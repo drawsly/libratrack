@@ -3,7 +3,7 @@
 import { z } from "zod";
 import { cookies } from "next/headers";
 import { lucia } from "@/lib/auth";
-import { RegisterState, LoginState } from "@/types/auth";
+import { RegisterState } from "@/types/auth";
 import { PrismaClient } from "@prisma/client";
 import * as bcrypt from "bcryptjs";
 
@@ -63,10 +63,14 @@ export async function registerUser(prevState: RegisterState | undefined, formDat
 export async function loginUser(prevState: any, formData: FormData) {
     try {
         const data = Object.fromEntries(formData);
-        const { email, password } = data;
+        const parsed = loginSchema.safeParse(data);
+
+        if (!parsed.success) {
+            return { error: parsed.error.errors[0].message };
+        }
 
         const user = await prisma.users.findUnique({
-            where: { email: email as string }
+            where: { email: parsed.data.email }
         });
 
         if (!user) {
@@ -74,7 +78,7 @@ export async function loginUser(prevState: any, formData: FormData) {
         }
 
         const validPassword = await bcrypt.compare(
-            password as string,
+            parsed.data.password,
             user.password
         );
 
@@ -87,9 +91,9 @@ export async function loginUser(prevState: any, formData: FormData) {
         const sessionCookie = lucia.createSessionCookie(session.id);
       
         (await cookies()).set(
-          sessionCookie.name,
-          sessionCookie.value,
-          sessionCookie.attributes
+            sessionCookie.name,
+            sessionCookie.value,
+            sessionCookie.attributes
         );
 
         return { success: true };
