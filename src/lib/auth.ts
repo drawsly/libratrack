@@ -62,8 +62,8 @@ export async function verifyPassword(password: string, hashedPassword: string) {
     return await bcrypt.compare(password, hashedPassword);
 }
 
-export async function createAuthSession(userId: string) {
-    const session = await lucia.createSession(userId, {});
+export async function createAuthSession(userId: string | number) {
+    const session = await lucia.createSession(userId.toString(), {});
 
     const sessionCookie = lucia.createSessionCookie(session.id);
 
