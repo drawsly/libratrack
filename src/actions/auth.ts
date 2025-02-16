@@ -1,7 +1,7 @@
 'use server'
 
 import { z } from "zod";
-import { RegisterState } from "@/types/auth";
+import { LoginState, RegisterState } from "@/types/auth";
 import { PrismaClient } from "@prisma/client";
 import { createAuthSession } from "@/lib/auth";
 import * as bcrypt from "bcryptjs";
@@ -24,7 +24,7 @@ const registerSchema = z.object({
     path: ["confirmPassword"]
 });
 
-export async function registerUser(prevState: RegisterState | undefined, formData: FormData) {
+export async function registerUser(prevState: RegisterState | undefined, formData: FormData): Promise<RegisterState> {
     const data = Object.fromEntries(formData);
     const parsed = registerSchema.safeParse(data);
 
@@ -62,7 +62,7 @@ export async function registerUser(prevState: RegisterState | undefined, formDat
     }
 }
 
-export async function loginUser(prevState: any, formData: FormData) {
+export async function loginUser(prevState: any, formData: FormData): Promise<LoginState> {
     try {
         const data = Object.fromEntries(formData);
         const parsed = loginSchema.safeParse(data);

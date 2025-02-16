@@ -22,7 +22,7 @@ import { toast } from 'sonner';
 export default function RegisterPage() {
   const router = useRouter();
 
-  const [state, formAction, isPending] = useActionState(
+  const [state, formAction, isPending] = useActionState<RegisterState, FormData>(
     async (prevState: any, formData: FormData) => {
       const result = await registerUser(prevState, formData);
 

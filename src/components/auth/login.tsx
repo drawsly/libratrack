@@ -18,13 +18,14 @@ import { useActionState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { LoaderCircle } from 'lucide-react';
+import { LoginState } from '@/types/auth';
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const [state, formAction, isPending] = useActionState(
+  const [state, formAction, isPending] = useActionState<LoginState, FormData>(
     async (prevState: any, formData: FormData) => {
       const result = await loginUser(prevState, formData);
 
