@@ -1,5 +1,8 @@
 export const siteMetadata = {
-    title: "LibraTrack",
-    description:
-        "LibraTrack, kütüphanelerin kitap yönetimi, ödünç alma ve iade işlemlerini kolaylaştıran modern bir yönetim sistemidir.",
+    title: {
+        default: "LibraTrack",
+        template: "%s | LibraTrack"
+    },
+    description: "LibraTrack ile kütüphane koleksiyonunuzu kolayca yönetin, kitapları takip edin ve ödünç verme işlemlerini dijitalleştirin.",
+    keywords: ["kütüphane yönetimi", "kitap takibi", "dijital kütüphane", "ödünç kitap sistemi"],
 };
