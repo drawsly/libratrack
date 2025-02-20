@@ -22,30 +22,33 @@ import { toast } from 'sonner';
 export default function RegisterPage() {
   const router = useRouter();
 
-  const [state, formAction, isPending] = useActionState<RegisterState, FormData>(
-    async (prevState: any, formData: FormData) => {
+  const [state, formAction, isPending] = useActionState<
+    RegisterState,
+    FormData
+  >(
+    async (prevState: RegisterState | undefined, formData: FormData) => {
       const result = await registerUser(prevState, formData);
 
       if (result.error) {
-        toast.error('Hata!', {
+        toast.error('Kayıt Başarısız', {
           description: result.error,
         });
-      } else {
+      } else if (result.success) {
         toast.success('Başarılı!', {
-          description:
-            'Hesabınız başarıyla oluşturuldu. Yönlendiriliyorsunuz...',
+          description: 'Kayıt başarılı. Yönlendiriliyorsunuz...',
         });
         setTimeout(() => {
-          router.push('/dashboard');
-        }, 2000);
+          router.push(result.redirect || '/dashboard');
+        }, 1500);
       }
 
       return result;
     },
     {
       error: '',
+      success: false,
     }
-  ) as [RegisterState, (payload: FormData) => void, boolean];
+  );
 
   const [name, setName] = useState('');
   const [surname, setSurname] = useState('');
