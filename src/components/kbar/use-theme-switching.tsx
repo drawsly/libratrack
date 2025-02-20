@@ -14,8 +14,8 @@ const useThemeSwitching = () => {
       name: 'Temayı Değiştir',
       shortcut: ['t', 't'],
       section: 'Tema',
-      perform: toggleTheme,
-    },
+      perform: toggleTheme
+    }
   ];
 
   useRegisterActions(themeAction, [theme]);

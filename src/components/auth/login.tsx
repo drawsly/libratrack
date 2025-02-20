@@ -8,7 +8,7 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -32,11 +32,11 @@ export default function LoginPage() {
 
       if (result.error) {
         toast.error('Giriş Başarısız', {
-          description: result.error,
+          description: result.error
         });
       } else if (result.success) {
         toast.success('Başarılı!', {
-          description: 'Giriş başarılı. Yönlendiriliyorsunuz...',
+          description: 'Giriş başarılı. Yönlendiriliyorsunuz...'
         });
         setTimeout(() => {
           router.push(result.redirect || '/dashboard');
@@ -47,13 +47,13 @@ export default function LoginPage() {
     },
     {
       error: '',
-      success: false,
+      success: false
     }
   );
 
   return (
-    <div className="grid w-full h-screen grow items-center px-4 sm:justify-center">
-      <Card className="w-full sm:w-96 shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.5)] dark:border-slate-800">
+    <div className='grid h-screen w-full grow items-center px-4 sm:justify-center'>
+      <Card className='w-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:border-slate-800 dark:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.5)] sm:w-96'>
         <CardHeader>
           <CardTitle>LibraTrack&apos;e giriş yap.</CardTitle>
           <CardDescription>
@@ -61,50 +61,50 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <form action={formAction}>
-          <CardContent className="grid gap-y-4">
-            <div className="space-y-2">
+          <CardContent className='grid gap-y-4'>
+            <div className='space-y-2'>
               <Label>Eposta adresi</Label>
               <Input
-                type="email"
-                name="email"
+                type='email'
+                name='email'
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
               {state?.error && state.error.includes('email') && (
-                <span className="text-red-500 text-sm">{state.error}</span>
+                <span className='text-sm text-red-500'>{state.error}</span>
               )}
             </div>
-            <div className="space-y-2">
+            <div className='space-y-2'>
               <Label>Şifre</Label>
               <Input
-                type="password"
-                name="password"
+                type='password'
+                name='password'
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
               {state?.error && state.error.includes('şifre') && (
-                <span className="text-red-500 text-sm">{state.error}</span>
+                <span className='text-sm text-red-500'>{state.error}</span>
               )}
             </div>
           </CardContent>
           <CardFooter>
-            <div className="grid w-full gap-y-4">
+            <div className='grid w-full gap-y-4'>
               <Button disabled={isPending}>
                 {isPending ? (
                   <Loader2
-                    className="-ms-1 me-2 animate-spin"
+                    className='-ms-1 me-2 animate-spin'
                     size={20}
                     strokeWidth={2}
-                    aria-hidden="true"
+                    aria-hidden='true'
                   />
                 ) : (
                   'Giriş yap'
                 )}
               </Button>
-              <Button variant="link" size="sm" asChild>
-                <Link href="/register">Hesabın yok mu? Kayıt ol</Link>
+              <Button variant='link' size='sm' asChild>
+                <Link href='/register'>Hesabın yok mu? Kayıt ol</Link>
               </Button>
             </div>
           </CardFooter>

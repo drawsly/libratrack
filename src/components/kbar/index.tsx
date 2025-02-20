@@ -5,7 +5,7 @@ import {
   KBarPortal,
   KBarPositioner,
   KBarProvider,
-  KBarSearch,
+  KBarSearch
 } from 'kbar';
 import { useRouter } from 'next/navigation';
 import { useMemo } from 'react';
@@ -33,7 +33,7 @@ export default function KBar({ children }: { children: React.ReactNode }) {
                 keywords: navItem.title.toLowerCase(),
                 section: 'Navigasyon',
                 subtitle: `Git ${navItem.title}`,
-                perform: () => navigateTo(navItem.url),
+                perform: () => navigateTo(navItem.url)
               }
             : null;
 
@@ -46,7 +46,7 @@ export default function KBar({ children }: { children: React.ReactNode }) {
             keywords: childItem.title.toLowerCase(),
             section: navItem.title,
             subtitle: `Git ${childItem.title}`,
-            perform: () => navigateTo(childItem.url),
+            perform: () => navigateTo(childItem.url)
           })) ?? [];
 
         // Return only valid actions (ignoring null base actions for containers)
@@ -67,13 +67,13 @@ const KBarComponent = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
       <KBarPortal>
-        <KBarPositioner className="scrollbar-hide fixed inset-0 z-[99999] bg-black/80 !p-0 backdrop-blur-sm">
-          <KBarAnimator className="relative !mt-64 w-full max-w-[600px] !-translate-y-12 overflow-hidden rounded-lg border bg-background text-foreground shadow-lg">
-            <div className="bg-background">
-              <div className="border-x-0 border-b-2">
+        <KBarPositioner className='scrollbar-hide fixed inset-0 z-[99999] bg-black/80 !p-0 backdrop-blur-sm'>
+          <KBarAnimator className='relative !mt-64 w-full max-w-[600px] !-translate-y-12 overflow-hidden rounded-lg border bg-background text-foreground shadow-lg'>
+            <div className='bg-background'>
+              <div className='border-x-0 border-b-2'>
                 <KBarSearch
-                  placeholder="Komut girin veya arama yapın"
-                  className="w-full border-none bg-background px-6 py-4 text-lg outline-none focus:outline-none focus:ring-0 focus:ring-offset-0"
+                  placeholder='Komut girin veya arama yapın'
+                  className='w-full border-none bg-background px-6 py-4 text-lg outline-none focus:outline-none focus:ring-0 focus:ring-offset-0'
                 />
               </div>
               <RenderResults />

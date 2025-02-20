@@ -7,7 +7,7 @@ import { SessionProvider } from 'next-auth/react';
 import { cookies } from 'next/headers';
 
 export default async function DashboardLayout({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) {

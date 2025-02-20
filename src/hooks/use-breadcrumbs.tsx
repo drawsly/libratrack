@@ -37,7 +37,7 @@ export function useBreadcrumbs() {
       const path = `/${segments.slice(0, index + 1).join('/')}`;
       return {
         title: segment.charAt(0).toUpperCase() + segment.slice(1),
-        link: path,
+        link: path
       };
     });
   }, [pathname]);

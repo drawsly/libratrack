@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -42,7 +42,7 @@
     --sidebar-border: 240 5.9% 90%;
     --sidebar-ring: 240 5.9% 10%;
   }
- 
+
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
@@ -82,7 +82,7 @@
     --sidebar-ring: 240 4.9% 83.9%;
   }
 }
- 
+
 @layer base {
   * {
     @apply border-border;
@@ -94,26 +94,30 @@
 
 @layer utilities {
   .shadow-card-dark {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.4);
+    box-shadow:
+      0 1px 3px rgba(0, 0, 0, 0.2),
+      0 1px 2px rgba(0, 0, 0, 0.4);
   }
 
   .shadow-elevation-dark {
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.4);
+    box-shadow:
+      0 4px 6px rgba(0, 0, 0, 0.2),
+      0 5px 15px rgba(0, 0, 0, 0.4);
   }
 
   .hover-elevation-dark {
     transition: background-color 0.2s ease;
   }
-  
+
   .hover-elevation-dark:hover {
     background-color: rgba(255, 255, 255, 0.03);
   }
-  
+
   .min-h-screen {
     min-height: 100vh;
     min-height: 100dvh;
   }
-  
+
   .h-screen {
     height: 100vh;
     height: 100dvh;

@@ -10,7 +10,7 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -31,11 +31,11 @@ export default function RegisterPage() {
 
       if (result.error) {
         toast.error('Kayıt Başarısız', {
-          description: result.error,
+          description: result.error
         });
       } else if (result.success) {
         toast.success('Başarılı!', {
-          description: 'Kayıt başarılı. Yönlendiriliyorsunuz...',
+          description: 'Kayıt başarılı. Yönlendiriliyorsunuz...'
         });
         setTimeout(() => {
           router.push(result.redirect || '/dashboard');
@@ -46,7 +46,7 @@ export default function RegisterPage() {
     },
     {
       error: '',
-      success: false,
+      success: false
     }
   );
 
@@ -57,8 +57,8 @@ export default function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   return (
-    <div className="grid w-full h-screen grow items-center px-4 sm:justify-center">
-      <Card className="w-full sm:w-96 shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.5)] dark:border-slate-800">
+    <div className='grid h-screen w-full grow items-center px-4 sm:justify-center'>
+      <Card className='w-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:border-slate-800 dark:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.5)] sm:w-96'>
         <CardHeader>
           <CardTitle>Hesabınızı oluşturun.</CardTitle>
           <CardDescription>
@@ -66,87 +66,87 @@ export default function RegisterPage() {
           </CardDescription>
         </CardHeader>
         <form action={formAction}>
-          <CardContent className="grid gap-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
+          <CardContent className='grid gap-y-4'>
+            <div className='grid grid-cols-2 gap-4'>
+              <div className='space-y-2'>
                 <Label>İsim</Label>
                 <Input
-                  type="text"
-                  name="name"
+                  type='text'
+                  name='name'
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
                 {state?.error && state.error.includes('İsim') && (
-                  <span className="text-red-500 text-sm">{state.error}</span>
+                  <span className='text-sm text-red-500'>{state.error}</span>
                 )}
               </div>
-              <div className="space-y-2">
+              <div className='space-y-2'>
                 <Label>Soyisim</Label>
                 <Input
-                  type="text"
-                  name="surname"
+                  type='text'
+                  name='surname'
                   value={surname}
                   onChange={(e) => setSurname(e.target.value)}
                 />
                 {state?.error && state.error.includes('Soyisim') && (
-                  <span className="text-red-500 text-sm">{state.error}</span>
+                  <span className='text-sm text-red-500'>{state.error}</span>
                 )}
               </div>
             </div>
-            <div className="space-y-2">
+            <div className='space-y-2'>
               <Label>Eposta adresi</Label>
               <Input
-                type="email"
-                name="email"
+                type='email'
+                name='email'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
               {state?.error && state.error.includes('email') && (
-                <span className="text-red-500 text-sm">{state.error}</span>
+                <span className='text-sm text-red-500'>{state.error}</span>
               )}
             </div>
-            <div className="space-y-2">
+            <div className='space-y-2'>
               <Label>Şifre</Label>
               <Input
-                type="password"
-                name="password"
+                type='password'
+                name='password'
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
               {state?.error && state.error.includes('Şifre') && (
-                <span className="text-red-500 text-sm">{state.error}</span>
+                <span className='text-sm text-red-500'>{state.error}</span>
               )}
             </div>
-            <div className="space-y-2">
+            <div className='space-y-2'>
               <Label>Şifreni doğrula</Label>
               <Input
-                type="password"
-                name="confirmPassword"
+                type='password'
+                name='confirmPassword'
                 required
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
               {state?.error && state.error.includes('Şifreler') && (
-                <span className="text-red-500 text-sm">{state.error}</span>
+                <span className='text-sm text-red-500'>{state.error}</span>
               )}
             </div>
           </CardContent>
           <CardFooter>
-            <div className="grid w-full gap-y-4">
+            <div className='grid w-full gap-y-4'>
               <Button disabled={isPending}>
                 {isPending ? (
                   <LoaderCircle
-                    className="-ms-1 me-2 animate-spin"
+                    className='-ms-1 me-2 animate-spin'
                     size={20}
                     strokeWidth={2}
-                    aria-hidden="true"
+                    aria-hidden='true'
                   />
                 ) : (
                   'Kayıt ol'
                 )}
               </Button>
-              <Button variant="link" size="sm" asChild>
-                <Link href="/login">Zaten bir hesabın var mı? Giriş yap</Link>
+              <Button variant='link' size='sm' asChild>
+                <Link href='/login'>Zaten bir hesabın var mı? Giriş yap</Link>
               </Button>
             </div>
           </CardFooter>

@@ -1,7 +1,3 @@
 export default function OverViewLayout() {
-    return (
-        <div>
-            Enter
-        </div>
-    );
+  return <div>Enter</div>;
 }

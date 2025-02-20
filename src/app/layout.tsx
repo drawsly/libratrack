@@ -15,19 +15,19 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = siteMetadata;
 
 export default async function RootLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
     <html
-      lang="tr"
+      lang='tr'
       className={`${inter.className} antialiased`}
       suppressHydrationWarning
     >
       <body className={`overflow-hidden`}>
         <NextTopLoader showSpinner={false} />
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
           {children}
           <Toaster />
         </ThemeProvider>
