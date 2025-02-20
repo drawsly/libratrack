@@ -36,7 +36,6 @@ import {
   Bell,
   ChevronRight,
   ChevronsUpDown,
-  CreditCard,
   GalleryVerticalEnd,
   LogOut,
 } from 'lucide-react';
@@ -44,6 +43,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import * as React from 'react';
 import { Icons } from '../icons';
+import { signOut, useSession } from 'next-auth/react';
 
 export const company = {
   name: 'LibraTrack',
@@ -52,8 +52,9 @@ export const company = {
 };
 
 export default function AppSidebar() {
-  const pathname = usePathname();
+  const { data: session } = useSession();
   const { state, isMobile } = useSidebar();
+  const pathname = usePathname();
 
   return (
     <Sidebar collapsible="icon">
@@ -139,23 +140,19 @@ export default function AppSidebar() {
                 >
                   <Avatar className="h-8 w-8 rounded-lg">
                     <AvatarImage
-                      src={''}
-                      // src={session?.user?.image || ''}
-                      alt={''}
+                      src={session?.user?.image || ''}
+                      alt={`${session?.user?.name} profil resmi`}
                     />
                     <AvatarFallback className="rounded-lg">
-                      {'CN'}
-                      {/* {session?.user?.name?.slice(0, 2)?.toUpperCase() || 'CN'} */}
+                      {session?.user?.name?.slice(0, 2)?.toUpperCase() || 'LT'}
                     </AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-semibold">
-                      {/* {session?.user?.name || ''} */}
-                      {'Enes (Oturum Yapan Kişi Değil)'}
+                      {`${session?.user?.name} ${session?.user?.surname}`}
                     </span>
                     <span className="truncate text-xs">
-                      {/* {session?.user?.email || ''} */}
-                      {'Yetkili'}
+                      {session?.user?.email || ''}
                     </span>
                   </div>
                   <ChevronsUpDown className="ml-auto size-4" />
@@ -171,26 +168,20 @@ export default function AppSidebar() {
                   <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                     <Avatar className="h-8 w-8 rounded-lg">
                       <AvatarImage
-                        src={''}
-                        alt={''}
-                        // src={session?.user?.image || ''}
-                        // alt={session?.user?.name || ''}
+                        src={session?.user?.image || ''}
+                        alt={`${session?.user?.name} profil resmi`}
                       />
                       <AvatarFallback className="rounded-lg">
-                        {'CN'}
-                        {/* {session?.user?.name?.slice(0, 2)?.toUpperCase() ||
-                          'CN'} */}
+                        {session?.user?.name?.slice(0, 2)?.toUpperCase() ||
+                          'LT'}
                       </AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
                       <span className="truncate font-semibold">
-                        {''}
-                        {/* {session?.user?.name || ''} */}
+                        {session?.user?.name || ''}
                       </span>
                       <span className="truncate text-xs">
-                        {' '}
-                        {''}
-                        {/* {session?.user?.email || ''} */}
+                        {session?.user?.email || ''}
                       </span>
                     </div>
                   </div>
@@ -208,7 +199,7 @@ export default function AppSidebar() {
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={() => signOut()}>
                   <LogOut />
                   Çıkış yap
                 </DropdownMenuItem>
