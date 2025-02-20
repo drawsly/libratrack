@@ -1,60 +1,71 @@
 import type { NextAuthConfig } from "next-auth"
-import { PrismaAdapter } from '@auth/prisma-adapter'
 import Credentials from "next-auth/providers/credentials"
 import { verifyPassword } from "./lib/password"
 import db from "./lib/db/db"
 import { loginSchema } from "./lib/zod"
 
-export default {
+export const authConfig = {
     providers: [
         Credentials({
-            id: "credentials",
-            name: "Credentials",
-            credentials: {
-                email: {},
-                password: {}
-            },
             async authorize(credentials) {
-                const validatedCredentials = loginSchema.parse(credentials);
+                try {
+                    const validatedCredentials = loginSchema.parse(credentials);
 
-                const user = await db.user.findFirst({
-                    where: {
-                        email: validatedCredentials.email.toLowerCase().trim(),
-                    },
-                });
+                    const user = await db.user.findFirst({
+                        where: {
+                            email: validatedCredentials.email.toLowerCase().trim(),
+                        },
+                    });
 
-                if (!user) {
-                    return null
+                    if (!user) {
+                        return null;
+                    }
+
+                    const isPasswordValid = await verifyPassword(
+                        credentials?.password as string,
+                        user.password
+                    );
+
+                    if (!isPasswordValid) {
+                        return null;
+                    }
+
+                    return {
+                        id: user.id,
+                        email: user.email,
+                        name: user.name || "",
+                        surname: user.surname || "",
+                        image: user.image || ""
+                    };
+                } catch {
+                    return null;
                 }
-
-                const isPasswordValid = await verifyPassword(
-                    credentials.password as string,
-                    user.password
-                );
-
-                if (!isPasswordValid) {
-                    return null
-                }
-
-                return user;
             }
         })
     ],
-    adapter: PrismaAdapter(db),
-    session: {
-        strategy: "jwt",
-        maxAge: 30 * 24 * 60 * 60, // 30 days
-    },
-    pages: {
-        signIn: "/login"
-    },
     callbacks: {
-        async jwt({ token, account }) {
-            if (account?.provider === "credentials") {
-                token.credentials = true;
+        async jwt({ token, user }) {
+            if (user) {
+                token.id = user.id;
+                token.email = user.email;
+                token.name = user.name;
+                token.surname = user.surname;
+                token.image = user.image;
             }
             return token;
+        },
+        async session({ token, session }) {
+            if (token) {
+                session.user.id = token.id as string;
+                session.user.email = token.email as string;
+                session.user.name = token.name as string;
+                session.user.surname = token.surname as string;
+                session.user.image = token.image as string;
+            }
+            return session;
         }
     },
-    //debug: process.env.NODE_ENV === "development"
-} satisfies NextAuthConfig
+    pages: {
+        signIn: "/login",
+    },
+} satisfies NextAuthConfig;
