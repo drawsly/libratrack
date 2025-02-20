@@ -22,7 +22,6 @@ import { LoginState } from '@/types/auth';
 
 export default function LoginPage() {
   const router = useRouter();
-  
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -54,7 +53,7 @@ export default function LoginPage() {
 
   return (
     <div className="grid w-full h-screen grow items-center px-4 sm:justify-center">
-      <Card className="w-full sm:w-96">
+      <Card className="w-full sm:w-96 shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.5)] dark:border-slate-800">
         <CardHeader>
           <CardTitle>LibraTrack&apos;e giriş yap.</CardTitle>
           <CardDescription>
