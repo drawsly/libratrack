@@ -56,5 +56,5 @@ export default {
             return token;
         }
     },
-    debug: process.env.NODE_ENV === "development"
+    //debug: process.env.NODE_ENV === "development"
 } satisfies NextAuthConfig
