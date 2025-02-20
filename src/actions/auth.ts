@@ -3,9 +3,9 @@
 import { LoginState, RegisterState } from "@/types/auth"
 import { signIn } from "@/auth"
 import { loginSchema, registerSchema } from "@/lib/zod"
-import db from "@/lib/db/db"
 import { hashPassword } from "@/lib/password"
 import { AuthError } from "next-auth"
+import db from "@/lib/db/db"
 
 
 export async function registerUser(prevState: RegisterState | undefined, formData: FormData): Promise<RegisterState> {
@@ -77,7 +77,7 @@ export async function loginUser(
             }
         }
 
-        const result = await signIn("credentials", {
+        await signIn("credentials", {
             email: validatedFields.data.email.toLowerCase().trim(),
             password: validatedFields.data.password,
             redirect: false
