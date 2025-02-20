@@ -41,7 +41,7 @@ export default function LoginPage() {
         });
         setTimeout(() => {
           router.push(result.redirect || '/dashboard');
-        }, 1500);
+        }, 1000);
       }
 
       return result;
