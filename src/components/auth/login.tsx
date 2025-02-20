@@ -17,35 +17,38 @@ import { loginUser } from '@/actions/auth';
 import { useActionState } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { LoaderCircle } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { LoginState } from '@/types/auth';
 
 export default function LoginPage() {
   const router = useRouter();
+  
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const [state, formAction, isPending] = useActionState<LoginState, FormData>(
-    async (prevState: any, formData: FormData) => {
+    async (prevState: LoginState | undefined, formData: FormData) => {
       const result = await loginUser(prevState, formData);
 
       if (result.error) {
-        toast.error('Hata!', {
+        toast.error('Giriş Başarısız', {
           description: result.error,
         });
-      } else {
+      } else if (result.success) {
         toast.success('Başarılı!', {
           description: 'Giriş başarılı. Yönlendiriliyorsunuz...',
         });
         setTimeout(() => {
-          router.push('/dashboard');
-        }, 2000);
+          router.push(result.redirect || '/dashboard');
+        }, 1500);
       }
 
       return result;
     },
     {
       error: '',
+      success: false,
     }
   );
 
@@ -91,7 +94,7 @@ export default function LoginPage() {
             <div className="grid w-full gap-y-4">
               <Button disabled={isPending}>
                 {isPending ? (
-                  <LoaderCircle
+                  <Loader2
                     className="-ms-1 me-2 animate-spin"
                     size={20}
                     strokeWidth={2}
