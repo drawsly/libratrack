@@ -1,7 +1,7 @@
 import type { NextAuthConfig } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { verifyPassword } from './lib/password';
-import db from './lib/db/db';
+import db from './lib/db';
 import { loginSchema } from './lib/zod';
 
 export const authConfig = {
