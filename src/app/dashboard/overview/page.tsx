@@ -1,5 +1,5 @@
 import { auth } from '@/auth';
-import PageContainer from '@/components/layout/page-container';
+import PageContainer from '@/shared/components/layout/page-container';
 
 export default async function OverViewPage() {
   const session = await auth();

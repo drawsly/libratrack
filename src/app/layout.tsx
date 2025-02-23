@@ -3,12 +3,13 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { siteMetadata } from '@/lib/metadata';
-import { Toaster } from '@/components/ui/sonner';
+import { siteMetadata } from '@/shared/utils';
+import { Toaster } from '@/shared/components/ui/sonner';
 import NextTopLoader from 'nextjs-toploader';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
+import { ThemeProvider } from '@/shared/components/layout/Theme/theme-provider';
 
 import '@/styles/globals.css';
-import { ThemeProvider } from '@/components/layout/Theme/theme-provider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -27,10 +28,13 @@ export default async function RootLayout({
     >
       <body className={`overflow-hidden`}>
         <NextTopLoader showSpinner={false} />
-        <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
-          {children}
-          <Toaster />
-        </ThemeProvider>
+
+        <NuqsAdapter>
+          <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
+            {children}
+            <Toaster />
+          </ThemeProvider>
+        </NuqsAdapter>
         <Analytics />
         <SpeedInsights />
       </body>

@@ -1,4 +1,4 @@
-import HeroPage from '@/components/hero';
+import HeroPage from '@/features/hero/components/hero';
 
 export default function HomePage() {
   return <HeroPage />;
