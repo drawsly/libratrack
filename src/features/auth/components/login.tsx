@@ -53,7 +53,7 @@ export default function LoginPage() {
 
   return (
     <div className='grid h-screen w-full grow items-center px-4 sm:justify-center'>
-      <Card className='w-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:border-slate-800 dark:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.5)] sm:w-96'>
+      <Card className='w-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.5)] sm:w-96'>
         <CardHeader>
           <CardTitle>LibraTrack&apos;e giriş yap.</CardTitle>
           <CardDescription>
