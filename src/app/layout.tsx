@@ -29,12 +29,10 @@ export default async function RootLayout({
       <body className={`overflow-hidden`}>
         <NextTopLoader showSpinner={false} />
 
-        <NuqsAdapter>
-          <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
-            {children}
-            <Toaster />
-          </ThemeProvider>
-        </NuqsAdapter>
+        <ThemeProvider attribute='class' defaultTheme='system' enableSystem>
+          <NuqsAdapter>{children}</NuqsAdapter>
+          <Toaster />
+        </ThemeProvider>
         <Analytics />
         <SpeedInsights />
       </body>
