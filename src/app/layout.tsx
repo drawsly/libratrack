@@ -3,7 +3,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import { siteMetadata } from '@/shared/utils';
+import { siteMetadata } from '@/lib/utils';
 import { Toaster } from '@/shared/components/ui/sonner';
 import NextTopLoader from 'nextjs-toploader';
 import { NuqsAdapter } from 'nuqs/adapters/next/app';
