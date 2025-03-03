@@ -6,7 +6,6 @@ import { cn } from '@/lib/utils';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { Suspense } from 'react';
-import BooksTableAction from './books-tables/books-table-action';
 import { DataTableSkeleton } from '@/shared/components/ui/table/data-table-skeleton';
 import { searchParamsCache, serialize } from '@/lib/searchparams';
 import { SearchParams } from 'nuqs/server';
@@ -20,10 +19,8 @@ type pageProps = {
 
 export default async function BooksPage(props: pageProps) {
   const searchParams = await props.searchParams;
-  // URL parametrelerini cache'e kaydet
   searchParamsCache.parse(searchParams);
 
-  // URL parametreleri değiştiğinde suspense'i tetikleyen key
   const key = serialize({ ...searchParams });
 
   return (
