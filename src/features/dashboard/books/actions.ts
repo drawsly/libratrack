@@ -24,13 +24,14 @@ export type BookFilters = {
   searchQuery?: string | null;
   book_type?: string | null;
   author_name?: string | null;
+  publisher?: string | null;
   page?: number;
   pageSize?: number;
 };
 
 export async function getBooks(filters: BookFilters = {}) {
   try {
-    const { searchQuery, book_type, author_name, page = 1, pageSize = 10 } = filters;
+    const { searchQuery, book_type, author_name, publisher, page = 1, pageSize = 10 } = filters;
 
     const skip = (page - 1) * pageSize;
 
@@ -40,41 +41,47 @@ export async function getBooks(filters: BookFilters = {}) {
     if (searchQuery) {
       where.OR = [
         { book_name: { contains: searchQuery, mode: 'insensitive' } },
-        { author_name: { contains: searchQuery, mode: 'insensitive' } }
+        { author_name: { contains: searchQuery, mode: 'insensitive' } },
+        { publisher: { contains: searchQuery, mode: 'insensitive' } }
       ];
     }
 
-    // book_type için çoklu değer desteği
     if (book_type) {
-      // Nokta (.) ile ayrılmış değerleri bir diziye dönüştür
       const bookTypes = book_type.split('.');
 
       if (bookTypes.length > 1) {
-        // Eğer birden çok kitap türü varsa, OR koşulu oluştur
         where.OR = [
-          ...(where.OR || []), // Mevcut OR koşullarını koru
+          ...(where.OR || []),
           ...bookTypes.map(type => ({ book_type: type }))
         ];
       } else {
-        // Tek bir kitap türü varsa normal kontrol yap
         where.book_type = book_type;
       }
     }
 
-    // author_name için çoklu değer desteği
     if (author_name) {
-      // Nokta (.) ile ayrılmış değerleri bir diziye dönüştür
       const authorNames = author_name.split('.');
 
       if (authorNames.length > 1) {
-        // Eğer birden çok yazar adı varsa, OR koşulu oluştur
         where.OR = [
-          ...(where.OR || []), // Mevcut OR koşullarını koru
+          ...(where.OR || []),
           ...authorNames.map(name => ({ author_name: name }))
         ];
       } else {
-        // Tek bir yazar adı varsa normal kontrol yap
         where.author_name = author_name;
+      }
+    }
+
+    if (publisher) {
+      const publishers = publisher.split('.');
+
+      if (publisher.length > 1) {
+        where.OR = [
+          ...(where.OR || []),
+          ...publishers.map(name => ({ publisher: name }))
+        ];
+      } else {
+        where.publisher = publisher;
       }
     }
 
@@ -152,7 +159,34 @@ export async function getAuthorNames() {
       }))
       .sort((a, b) => a.label.localeCompare(b.label));
   } catch (error) {
-    console.error('Error fetching book types:', error);
+    console.error('Error fetching author names:', error);
+    return [];
+  }
+}
+
+export async function getPublishers() {
+  try {
+    const types = await db.books.findMany({
+      select: {
+        publisher: true
+      },
+      distinct: ['publisher'],
+      where: {
+        publisher: {
+          not: null
+        }
+      }
+    });
+
+    return types
+      .filter((type) => type.publisher)
+      .map((type) => ({
+        label: type.publisher as string,
+        value: type.publisher as string
+      }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  } catch (error) {
+    console.error('Error fetching publishers:', error);
     return [];
   }
 }
