@@ -10,6 +10,7 @@ export const searchParams = {
   limit: parseAsInteger.withDefault(10),
   book_type: parseAsString.withDefault(''),
   author_name: parseAsString.withDefault(''),
+  publisher: parseAsString.withDefault(''),
   q: parseAsString,
   gender: parseAsString,
   categories: parseAsString

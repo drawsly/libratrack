@@ -150,24 +150,23 @@ export function DataTable<TData, TValue>({
         <div className='flex w-full items-center justify-between'>
           <div className='flex-1 text-sm text-muted-foreground'>
             {totalItems > 0 ? (
-              //Todo: Translate texts
               <>
-                Showing{' '}
-                {paginationState.pageIndex * paginationState.pageSize + 1} to{' '}
+                Toplam {totalItems} kayıttan{' '}
+                {paginationState.pageIndex * paginationState.pageSize + 1} ile{' '}
                 {Math.min(
                   (paginationState.pageIndex + 1) * paginationState.pageSize,
                   totalItems
                 )}{' '}
-                of {totalItems} entries
+                arası gösteriliyor
               </>
             ) : (
-              'No entries found'
+              'Kayıt bulunamadı'
             )}
           </div>
           <div className='flex flex-col items-center gap-4 sm:flex-row sm:gap-6 lg:gap-8'>
             <div className='flex items-center space-x-2'>
               <p className='whitespace-nowrap text-sm font-medium'>
-                Rows per page
+                Sayfa başına satır
               </p>
               <Select
                 value={`${paginationState.pageSize}`}
@@ -193,15 +192,15 @@ export function DataTable<TData, TValue>({
           <div className='flex w-[150px] items-center justify-center text-sm font-medium'>
             {totalItems > 0 ? (
               <>
-                Page {paginationState.pageIndex + 1} of {table.getPageCount()}
+                Sayfa {paginationState.pageIndex + 1} / {table.getPageCount()}
               </>
             ) : (
-              'No pages'
+              'Sayfa yok'
             )}
           </div>
           <div className='flex items-center space-x-2'>
             <Button
-              aria-label='Go to first page'
+              aria-label='İlk sayfaya git'
               variant='outline'
               className='hidden h-8 w-8 p-0 lg:flex'
               onClick={() => table.setPageIndex(0)}
@@ -210,7 +209,7 @@ export function DataTable<TData, TValue>({
               <DoubleArrowLeftIcon className='h-4 w-4' aria-hidden='true' />
             </Button>
             <Button
-              aria-label='Go to previous page'
+              aria-label='Önceki sayfaya git'
               variant='outline'
               className='h-8 w-8 p-0'
               onClick={() => table.previousPage()}
@@ -219,7 +218,7 @@ export function DataTable<TData, TValue>({
               <ChevronLeftIcon className='h-4 w-4' aria-hidden='true' />
             </Button>
             <Button
-              aria-label='Go to next page'
+              aria-label='Sonraki sayfaya git'
               variant='outline'
               className='h-8 w-8 p-0'
               onClick={() => table.nextPage()}
@@ -228,7 +227,7 @@ export function DataTable<TData, TValue>({
               <ChevronRightIcon className='h-4 w-4' aria-hidden='true' />
             </Button>
             <Button
-              aria-label='Go to last page'
+              aria-label='Son sayfaya git'
               variant='outline'
               className='hidden h-8 w-8 p-0 lg:flex'
               onClick={() => table.setPageIndex(table.getPageCount() - 1)}
