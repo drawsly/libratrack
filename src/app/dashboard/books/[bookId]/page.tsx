@@ -6,14 +6,15 @@ import { Metadata, ResolvingMetadata } from 'next';
 import { getBookById } from '@/features/dashboard/books/actions';
 
 type Props = {
-  params: { bookId: string };
+  params: Promise<{ bookId: string }>;
 };
 
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const { bookId } = params;
+  const resolvedParams = await params;
+  const { bookId } = resolvedParams;
 
   if (bookId === 'new') {
     return {
@@ -43,7 +44,8 @@ export async function generateMetadata(
 }
 
 export default async function Page({ params }: Props) {
-  const { bookId } = params;
+  const resolvedParams = await params;
+  const { bookId } = resolvedParams;
 
   return (
     <PageContainer scrollable>
