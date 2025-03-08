@@ -5,6 +5,7 @@ type pageProps = {
   searchParams: Promise<SearchParams>;
 };
 
+
 export default function Books(props: pageProps) {
   const searchParams = props.searchParams;
 
