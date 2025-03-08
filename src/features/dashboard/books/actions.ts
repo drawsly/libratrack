@@ -1,22 +1,11 @@
 'use server';
 
 import db from '@/lib/db';
+
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { Prisma } from '@prisma/client';
-
-const BookSchema = z.object({
-  book_name: z.string().nullable(),
-  author_name: z.string().nullable(),
-  publisher: z.string().nullable(),
-  publish_year: z.number().nullable(),
-  page_count: z.number().nullable(),
-  book_type: z.string().nullable(),
-  book_case: z.string().nullable(),
-  shelf: z.number().nullable(),
-  row: z.number().nullable(),
-  entrusted: z.boolean().default(false).nullable()
-});
+import { BookSchema } from './validations';
 
 export type BookFormValues = z.infer<typeof BookSchema>;
 
@@ -31,7 +20,14 @@ export type BookFilters = {
 
 export async function getBooks(filters: BookFilters = {}) {
   try {
-    const { searchQuery, book_type, author_name, publisher, page = 1, pageSize = 10 } = filters;
+    const {
+      searchQuery,
+      book_type,
+      author_name,
+      publisher,
+      page = 1,
+      pageSize = 10
+    } = filters;
 
     const skip = (page - 1) * pageSize;
 
@@ -52,7 +48,7 @@ export async function getBooks(filters: BookFilters = {}) {
       if (bookTypes.length > 1) {
         where.OR = [
           ...(where.OR || []),
-          ...bookTypes.map(type => ({ book_type: type }))
+          ...bookTypes.map((type) => ({ book_type: type }))
         ];
       } else {
         where.book_type = book_type;
@@ -65,7 +61,7 @@ export async function getBooks(filters: BookFilters = {}) {
       if (authorNames.length > 1) {
         where.OR = [
           ...(where.OR || []),
-          ...authorNames.map(name => ({ author_name: name }))
+          ...authorNames.map((name) => ({ author_name: name }))
         ];
       } else {
         where.author_name = author_name;
@@ -78,7 +74,7 @@ export async function getBooks(filters: BookFilters = {}) {
       if (publisher.length > 1) {
         where.OR = [
           ...(where.OR || []),
-          ...publishers.map(name => ({ publisher: name }))
+          ...publishers.map((name) => ({ publisher: name }))
         ];
       } else {
         where.publisher = publisher;
@@ -193,35 +189,50 @@ export async function getPublishers() {
 
 export async function createBook(data: BookFormValues) {
   try {
-    const validatedData = BookSchema.parse(data);
-
-    const book = await db.books.create({
-      data: validatedData
+    await db.books.create({
+      data: {
+        book_name: data.book_name,
+        author_name: data.author_name,
+        publisher: data.publisher,
+        publish_year: data.publish_year,
+        page_count: data.page_count,
+        book_type: data.book_type,
+        book_case: data.book_case,
+        shelf: data.shelf,
+        row: data.row
+      }
     });
 
     revalidatePath('/dashboard/books');
-    return { success: true, book };
+    return { success: true };
   } catch (error) {
     console.error('Error creating book:', error);
-    return { success: false, error: 'Failed to create book' };
+    return { success: false, error: 'Kitap eklenirken bir hata oluştu' };
   }
 }
 
 export async function updateBook(id: string, data: BookFormValues) {
   try {
-    const validatedData = BookSchema.parse(data);
-
-    const book = await db.books.update({
+    await db.books.update({
       where: { id },
-      data: validatedData
+      data: {
+        book_name: data.book_name,
+        author_name: data.author_name,
+        publisher: data.publisher,
+        publish_year: data.publish_year,
+        page_count: data.page_count,
+        book_type: data.book_type,
+        book_case: data.book_case,
+        shelf: data.shelf,
+        row: data.row
+      }
     });
 
     revalidatePath('/dashboard/books');
-    revalidatePath(`/dashboard/books/${id}`);
-    return { success: true, book };
+    return { success: true };
   } catch (error) {
-    console.error(`Error updating book ${id}:`, error);
-    return { success: false, error: 'Failed to update book' };
+    console.error('Error updating book:', error);
+    return { success: false, error: 'Kitap güncellenirken bir hata oluştu' };
   }
 }
 
@@ -262,24 +273,33 @@ export async function getBookById(id: string) {
     const book = await db.books.findUnique({
       where: { id },
       include: {
-        loans: {
-          include: {
-            users: true
-          },
-          orderBy: {
-            loan_date: 'desc'
-          }
-        }
+        loans: true
       }
     });
 
     if (!book) {
-      return { success: false, error: 'Book not found' };
+      return { success: false, error: 'Kitap bulunamadı' };
     }
 
     return { success: true, book };
   } catch (error) {
-    console.error(`Error getting book ${id}:`, error);
-    return { success: false, error: 'Failed to get book details' };
+    console.error('Error fetching book:', error);
+    return { success: false, error: 'Kitap getirilirken bir hata oluştu' };
+  }
+}
+
+export async function getBookNameById(bookId: string) {
+  'use server';
+
+  try {
+    const book = await db.books.findUnique({
+      where: { id: bookId },
+      select: { book_name: true }
+    });
+
+    return { success: true, bookName: book?.book_name || null };
+  } catch (error) {
+    console.error('Error fetching book name:', error);
+    return { success: false, bookName: null };
   }
 }
