@@ -5,12 +5,15 @@ import BookViewPage from '@/features/dashboard/books/components/book-view-page';
 import { Metadata, ResolvingMetadata } from 'next';
 import { getBookById } from '@/features/dashboard/books/actions';
 
+type Props = {
+  params: { bookId: string };
+};
+
 export async function generateMetadata(
-  { params }: { params: { bookId: string } | Promise<{ bookId: string }> },
+  { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
-  const resolvedParams = 'then' in params ? await params : params;
-  const bookId = resolvedParams.bookId;
+  const { bookId } = params;
 
   if (bookId === 'new') {
     return {
@@ -39,10 +42,7 @@ export async function generateMetadata(
   };
 }
 
-type PageProps = { params: { bookId: string } | Promise<{ bookId: string }> };
-
-export default async function Page(props: PageProps) {
-  const params = 'then' in props.params ? await props.params : props.params;
+export default async function Page({ params }: Props) {
   const { bookId } = params;
 
   return (
