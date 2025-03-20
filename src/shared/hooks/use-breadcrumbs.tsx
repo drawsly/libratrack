@@ -14,9 +14,10 @@ const segmentMappings: Record<string, string> = {
   dashboard: 'Kontrol Paneli',
   overview: 'Genel Bakış',
   books: 'Kitaplar',
+  readers: 'Okuyucular',
   loans: 'Emanetler',
   users: 'Kullanıcılar',
-  new: 'Yeni Kitap'
+  new: 'Yeni Oluştur'
 };
 
 export function useBreadcrumbs() {
