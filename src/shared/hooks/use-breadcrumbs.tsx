@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { getBookNameById } from '@/features/dashboard/books/actions';
+import { getReaderNameById } from '@/features/dashboard/readers/actions';
 
 type BreadcrumbItem = {
   title: string;
@@ -23,6 +24,9 @@ const segmentMappings: Record<string, string> = {
 export function useBreadcrumbs() {
   const pathname = usePathname();
   const [dynamicBookTitle, setDynamicBookTitle] = useState<string | null>(null);
+  const [dynamicReaderName, setDynamicReaderName] = useState<string | null>(
+    null
+  );
 
   // URL segmentlerini al
   const segments = useMemo(
@@ -41,15 +45,24 @@ export function useBreadcrumbs() {
     );
   }, [segments]);
 
-  // Kitap ID'si
-  const bookId = isBookDetailPage ? segments[2] : null;
+  // Okuyucu detay sayfasında mıyız?
+  const isReaderDetailPage = useMemo(() => {
+    return (
+      segments.length >= 2 &&
+      segments[0] === 'dashboard' &&
+      segments[1] === 'readers' &&
+      segments[2] &&
+      segments[2] !== 'new'
+    );
+  }, [segments]);
 
-  // Kitap adını getir
+  const bookId = isBookDetailPage ? segments[2] : null;
+  const readerId = isReaderDetailPage ? segments[2] : null;
+
   useEffect(() => {
     let isMounted = true;
 
     if (isBookDetailPage && bookId) {
-      // Server action ile kitap bilgisini getir
       getBookNameById(bookId).then((result) => {
         if (isMounted && result.success) {
           setDynamicBookTitle(result.bookName);
@@ -59,10 +72,20 @@ export function useBreadcrumbs() {
       setDynamicBookTitle(null);
     }
 
+    if (isReaderDetailPage && readerId) {
+      getReaderNameById(readerId).then((result) => {
+        if (isMounted && result.success) {
+          setDynamicReaderName(result.readerName);
+        }
+      });
+    } else {
+      setDynamicReaderName(null);
+    }
+
     return () => {
       isMounted = false;
     };
-  }, [isBookDetailPage, bookId]);
+  }, [isBookDetailPage, bookId, isReaderDetailPage, readerId]);
 
   // Breadcrumbs oluştur
   const breadcrumbs = useMemo(() => {
@@ -82,6 +105,19 @@ export function useBreadcrumbs() {
         };
       }
 
+      // Okuyucu detay sayfası için özel başlık
+      if (
+        index === 2 &&
+        segments[1] === 'readers' &&
+        segment !== 'new' &&
+        dynamicReaderName
+      ) {
+        return {
+          title: dynamicReaderName,
+          link: path
+        };
+      }
+
       // Segmentler için özel başlık kullan
       const title =
         segmentMappings[segment] ||
@@ -92,7 +128,7 @@ export function useBreadcrumbs() {
         link: path
       };
     });
-  }, [segments, dynamicBookTitle]);
+  }, [segments, dynamicBookTitle, dynamicReaderName]);
 
   return breadcrumbs;
 }
